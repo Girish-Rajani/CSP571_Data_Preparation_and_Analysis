@@ -5,14 +5,14 @@ This repository contains my learning journey in the subject of Data Preparation 
 
 ## Table of Contents
 
-1. [Statistical Learning](#distributed-systems--fault-tolerance)
-2. [Linear Regression](#distributed-filesystems--hdfs)
-3. [Classification](#mapreduce--yarn)
-4. [Resampling & Cross-Validation](#hive--pig)
-5. [Non-Linear Models](#spark--spark-sql)
-6. [Supervised Learning - Decision Trees & Support Vector Machines](#kafka--spark-streaming)
-7. [Deep Learning - Neural Networks](#nosql--cap)
-8. [Unsupervised Learning - Dimensionality Reduction/Clustering](#key-value--wide-column-stores)
+1. [Statistical Learning]([#statistical-learning))
+2. [Linear Regression](#linear-regression)
+3. [Classification](#classification)
+4. [Resampling & Cross-Validation](#resampling--cross-validation)
+5. [Non-Linear Models]([#non-linear-models))
+6. [Supervised Learning - Decision Trees & Support Vector Machines](#supervised-learning---decision-trees--support-vector-machines))
+7. [Deep Learning - Neural Networks]([#deep-learning---neural-networks))
+8. [Unsupervised Learning - Dimensionality Reduction/Clustering](#unsupervised-learning---dimensionality-reductionclustering)
 
 ## Statistical Learning
 
