@@ -1,0 +1,526 @@
+---
+title: "DPA Assignment 5"
+author: "Girish Rajani"
+date: "2023-04-30"
+output:
+  word_document: default
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+#Recitation Problems
+
+#Chapter 12
+
+#1a
+Prove 12.18
+
+$$
+\frac{1}{|C_k|} \sum\limits_{i,i^{\prime} \in C_k} \sum\limits_{j=1}^p (x_{ij} - x_{i^\prime j})^2 = 
+2 \sum\limits_{i \in C_k} \sum\limits_{j=1}^{p} (x_{ij} - \bar{x}_{kj})^2
+\
+$$
+
+$$
+= \frac{1}{|C_k|} \sum\limits_{i,i^{\prime} \in C_k} \sum\limits_{j=1}^p ((x_{ij} - \bar{x}_{kj}) - (x_{i^\prime j} - \bar{x}_{kj}))^2
+\
+$$
+$$
+= \frac{1}{|C_k|} \sum\limits_{i,i^{\prime} \in C_k} \sum\limits_{j=1}^p ((x_{ij} - \bar{x}_{kj})^2 - 2 (x_{ij} - \bar{x}_{kj})(x_{i^\prime j} - \bar{x}_{kj}) + (x_{i^\prime j} - \bar{x}_{kj})^2)
+\
+$$
+
+$$
+= \frac{|C_k|}{|C_k|} \sum\limits_{i \in C_k} \sum\limits_{j=1}^p (x_{ij} - \bar{x}_{kj})^2 +
+  \frac{|C_k|}{|C_k|} \sum\limits_{i^{\prime} \in C_k} \sum\limits_{j=1}^p (x_{i^\prime j} - \bar{x}_{kj})^2 -
+  \frac{2}{|C_k|} \sum\limits_{i,i^{\prime} \in C_k} \sum\limits_{j=1}^p (x_{ij} - \bar{x}_{kj})(x_{i^\prime j} - \bar{x}_{kj})
+\
+$$
+
+$$
+= 2 \sum\limits_{i \in C_k} \sum\limits_{j=1}^p (x_{ij} - \bar{x}_{kj})^2 + 0
+$$
+
+#1b
+
+At each iteration, since each observation is assigned to the closest centroid based on the euclidean distance dissimilarity measure. This minimizes the sum of squared Euclidean distance as proven above. This is equivalent to minimizing the within-cluster variation for each cluster. This is guaranteed to decrease the value of the objective 12.17.
+
+#2a
+
+```{r}
+#create the dissimilarity matrix
+dissimilarity_matrix <- as.dist(matrix(c(
+                     0, 0.3, 0.4, 0.7, 
+                     0.3, 0, 0.5, 0.8,
+                     0.4, 0.5, 0.0, 0.45,
+                     0.7, 0.8, 0.45, 0.0), nrow = 4))
+
+#hierarchically clustering using complete linkage
+complete_linkage_clustering <- hclust(dissimilarity_matrix, method = "complete")
+
+#Heights at which each fusion occurs
+cat("Heights at which each fusion occurs for complete linkage:",complete_linkage_clustering$height)
+
+#sketch the dendrogram
+plot(complete_linkage_clustering)
+```
+
+#2b
+
+```{r}
+
+#hierarchically clustering using single linkage
+single_linkage_clustering <- hclust(dissimilarity_matrix, method = "single")
+
+#Heights at which each fusion occurs
+cat("Heights at which each fusion occurs for single linkage:",single_linkage_clustering$height)
+
+#sketch the dendrogram
+plot(single_linkage_clustering)
+```
+
+#2c
+
+```{r}
+#Cut the tree that resulted from hclust into several groups by specifying 2 clusters (k=2)
+complete_linkage_cut <- cutree(complete_linkage_clustering, k = 2)
+
+#returns a vector with group memberships
+complete_linkage_cut
+```
+
+We can see from above that based on the returned group memberships from the vector, the observations in each cluster from (a) are: (1,2), (3,4)
+
+
+
+#2d
+
+```{r}
+#Cut the tree that resulted from hclust into several groups by specifying 2 clusters (k=2)
+single_linkage_cut <- cutree(single_linkage_clustering, k = 2)
+
+#returns a vector with group memberships
+single_linkage_cut
+```
+
+We can see from above that based on the returned group memberships from the vector, the observations in each cluster from (b) are: ((1,2),3), (4)
+
+
+#2e
+
+```{r}
+#Plotting a dendrogram that is equivalent to the dendrogram in (a)
+plot(hclust(dissimilarity_matrix, method="complete"), labels=c(2,1,4,3))
+```
+
+
+#3a
+
+```{r}
+#Creating a data frame of the observations given
+observations = data.frame(X1 = c(1, 1, 0, 5, 6, 4), X2 = c(4, 3, 4, 1, 2, 0))
+observations
+
+#Plotting the observations
+plot(observations)
+
+```
+
+#3b
+
+```{r}
+#Randomly assign a cluster label to each observation using the sample() command
+set.seed(3)
+cluster_label = sample(2, nrow(observations), replace=T)
+cbind(observations,cluster_label)
+
+```
+
+#3c
+
+```{r}
+#Computing the centroid for each cluster
+centroid_label_1 = c(mean(observations[cluster_label==1, 1]), mean(observations[cluster_label==1, 2]))
+centroid_label_2 = c(mean(observations[cluster_label==2, 1]), mean(observations[cluster_label==2, 2]))
+
+cat("centroid for label 1:",centroid_label_1)
+cat("\ncentroid for label 2:",centroid_label_2)
+
+#Plotting both centroid points on the plot along with the observations color coded based on their cluster label
+plot(observations, pch = 15, col = (cluster_label+1))
+points(centroid_label_1[1], centroid_label_1[2], col=2, pch=4)
+points(centroid_label_2[1], centroid_label_2[2], col=3, pch=4)
+```
+
+#3d
+
+```{r}
+#Function to compute euclidean distance
+euclidean_distance = function(a, b) {
+  (sqrt((a[1] - b[1])^2 + (a[2]-b[2])^2))
+}
+
+#Go through each observation and assigns them to the centroid to which it is closest, in terms of the euclidean distance
+cluster_labels = function(observations, centroid_label_1, centroid_label_2) {
+  cluster_label = rep(NA, nrow(observations))
+  
+  for (i in 1:nrow(observations)) {
+    if (euclidean_distance(observations[i,], centroid_label_1) < euclidean_distance(observations[i,], centroid_label_2)) {
+      cluster_label[i] = 1
+    } else {
+      cluster_label[i] = 2
+    }
+  }
+  return(cluster_label)
+}
+
+cluster_label = cluster_labels(observations, centroid_label_1, centroid_label_2)
+cat("cluster labels for each observation after assigning in terms of the euclidean distance:",cluster_label)
+```
+
+#3e
+
+```{r}
+#Repeat (c) and (d) until the answers obtained stop changing
+last_labels = rep(-1, 6)
+
+while (!all(last_labels == cluster_label)) {
+ last_labels = cluster_label
+ 
+ #Compute centroid for each cluster (c)
+ centroid_label_1 = c(mean(observations[cluster_label==1, 1]), mean(observations[cluster_label==1, 2]))
+ centroid_label_2 = c(mean(observations[cluster_label==2, 1]), mean(observations[cluster_label==2, 2]))
+ 
+ print(centroid_label_1)
+ print(centroid_label_2)
+ 
+ #Assign each observation to the centroid using the function from (d)
+ cluster_label = cluster_labels(observations, centroid_label_1, centroid_label_2)
+}
+
+print(cluster_label)
+```
+
+
+#3f
+
+```{r}
+#Coloring the observations based on the cluster labels obtained
+plot(observations[,1], observations[,2], col=(cluster_label+1), pch=20, cex=2)
+points(centroid_label_1[1], centroid_label_1[2], col=2, pch=4)
+points(centroid_label_2[1], centroid_label_2[2], col=3, pch=4)
+
+```
+
+#4a
+
+There is not enough information to tell which fusion will occur higher on the tree or whether they will fuse at the same height. To determine this, we will need more information such as the dissimilarity matrix. This is because the dissimilarity between two clusters determines the height at which fusion takes place.
+If the dissimilarity for both the single and complete linkage are the same then fusion will occur at the same height. Otherwise, single linkage would typically fuse at a lower height on the tree than complete linkage.
+
+#4b
+
+The different types of linkage will impact the height at which 'clusters' fuse but in this case, since we are fusing leaf nodes, the type of linkage will not affect. Therefore, They will fuse at the same height.
+
+
+
+#Practicum Problems
+
+```{r}
+#install.packages("collections")
+library(factoextra)
+library(collections)
+library(dplyr)
+```
+
+#Question 1
+
+```{r}
+#load the dataset and label the columns
+wine_dataframe <- read.csv(url("https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data"), sep=",", header=F)
+
+col_names <- c('Alcohol','Malic acid','Ash','Alcalinity of ash','Magnesium','Total phenols','Flavanoids','Nonflavanoid','phenols','Proanthocyanins','Color intensity','Hue','OD280/OD315 of diluted wines','Proline')
+
+colnames(wine_dataframe) <- col_names
+
+summary(wine_dataframe)
+head(wine_dataframe)
+
+```
+
+```{r}
+#Observe the variance among the features to decide whether to scale or not
+
+print(apply(wine_dataframe,2,var))
+```
+
+As shown from the variance of each feature above, there is a large difference in variance amongst some features and so to bring all features onto the same scale to avoid bias of the principal components, scaling will be performed.
+
+
+```{r}
+#Use prcomp to perform a PCA on the wine data using scaling
+pca_model_scaling <- prcomp(wine_dataframe , scale=TRUE)
+summary(pca_model_scaling)
+```
+
+
+```{r}
+#Plotting biplot of the results
+biplot(pca_model_scaling,scale=0)
+```
+Based on the biplot above, Ash is a feature which is pointed in the opposite direction of Hue in the principal component/rotated feature space. Regarding the correlation of this feature to Hue, they are inversely correlated. 
+
+```{r}
+calculated_value <- cor.test(wine_dataframe$Ash, wine_dataframe$Hue,method = "pearson")
+calculated_value
+```
+Based on the correlation value of Hue and Ash as shown above (-0.5612957), we can also confirm that they are indeed negatively correlated.
+
+
+```{r}
+#Compute the proportion of variance explained by each principal component
+prop_variance <- pca_model_scaling$sdev^2 / sum(pca_model_scaling$sdev^2)
+prop_variance
+
+cat("\nThe total variance explained by PC1 and PC2 is:", (prop_variance[1] + prop_variance[2])*100,"%")
+```
+ 
+
+```{r}
+#Plotting a screeplot of results
+plot(prop_variance, xlab = "Principal Component", ylab = "Variance Explained ", ylim = c(0,1), type="b")
+```
+
+#Question 2
+
+```{r}
+set.seed(30)
+arrest_data <- data.frame(USArrests)
+
+summary(arrest_data)
+head(arrest_data)
+```
+
+```{r}
+#Observe the variance among the features to decide whether to scale or not
+
+print(apply(arrest_data,2,var))
+```
+
+As shown above, since there is a significant difference in the variance for each feature, 
+by applying scaling, all variables will be on the same scale and have equal weight which will be be beneficial during k means clustering
+
+
+```{r}
+#Perform scaling
+arrest_data_scaled <- scale(arrest_data,center = TRUE,scale=TRUE)
+
+```
+
+```{r}
+#Perform kmeans clustering on the scaled observations with increasing values of k from 2 to 10
+k2 <- kmeans(arrest_data_scaled, centers = 2, nstart = 25)
+k3 <- kmeans(arrest_data_scaled, centers = 3, nstart = 25)
+k4 <- kmeans(arrest_data_scaled, centers = 4, nstart = 25)
+k5 <- kmeans(arrest_data_scaled, centers = 5, nstart = 25)
+k6 <- kmeans(arrest_data_scaled, centers = 6, nstart = 25)
+k7 <- kmeans(arrest_data_scaled, centers = 7, nstart = 25)
+k8 <- kmeans(arrest_data_scaled, centers = 8, nstart = 25)
+k9 <- kmeans(arrest_data_scaled, centers = 9, nstart = 25)
+k10 <- kmeans(arrest_data_scaled, centers = 10, nstart = 25)
+
+#Visualize the clustering for each value of k performed
+plot2 <- fviz_cluster(k2, geom = "point", data = arrest_data_scaled) + ggtitle("k = 2")
+plot2_normal <- plot (arrest_data_scaled, col = (k2$cluster + 1),main = "K- Means Clustering Results with K = 2",xlab = "", ylab = "", pch = 20, cex = 2)
+plot3 <- fviz_cluster(k3, geom = "point",  data = arrest_data_scaled) + ggtitle("k = 3")
+plot3_normal <- plot (arrest_data_scaled, col = (k3$cluster + 1),main = "K- Means Clustering Results with K = 3",xlab = "", ylab = "", pch = 20, cex = 2)
+plot4 <- fviz_cluster(k4, geom = "point",  data = arrest_data_scaled) + ggtitle("k = 4")
+plot4_normal <- plot (arrest_data_scaled, col = (k4$cluster + 1),main = "K- Means Clustering Results with K = 4",xlab = "", ylab = "", pch = 20, cex = 2)
+plot5 <- fviz_cluster(k5, geom = "point",  data = arrest_data_scaled) + ggtitle("k = 5")
+plot5_normal <- plot (arrest_data_scaled, col = (k5$cluster + 1),main = "K- Means Clustering Results with K = 5",xlab = "", ylab = "", pch = 20, cex = 2)
+plot6 <- fviz_cluster(k6, geom = "point", data = arrest_data_scaled) + ggtitle("k = 6")
+plot6_normal <- plot (arrest_data_scaled, col = (k6$cluster + 1),main = "K- Means Clustering Results with K = 6",xlab = "", ylab = "", pch = 20, cex = 2)
+plot7 <- fviz_cluster(k7, geom = "point",  data = arrest_data_scaled) + ggtitle("k = 7")
+plot7_normal <- plot (arrest_data_scaled, col = (k7$cluster + 1),main = "K- Means Clustering Results with K = 7",xlab = "", ylab = "", pch = 20, cex = 2)
+plot8 <- fviz_cluster(k8, geom = "point",  data = arrest_data_scaled) + ggtitle("k = 8")
+plot8_normal <- plot (arrest_data_scaled, col = (k8$cluster + 1),main = "K- Means Clustering Results with K = 8",xlab = "", ylab = "", pch = 20, cex = 2)
+plot9 <- fviz_cluster(k9, geom = "point",  data = arrest_data_scaled) + ggtitle("k = 9")
+plot9_normal <- plot (arrest_data_scaled, col = (k9$cluster + 1),main = "K- Means Clustering Results with K = 9",xlab = "", ylab = "", pch = 20, cex = 2)
+plot10 <- fviz_cluster(k10, geom = "point", data = arrest_data_scaled) + ggtitle("k = 10")
+plot10_normal <- plot (arrest_data_scaled, col = (k10$cluster + 1),main = "K- Means Clustering Results with K = 10",xlab = "", ylab = "", pch = 20, cex = 2)
+
+k2
+plot2
+plot2_normal
+k3
+plot3
+plot3_normal
+k4
+plot4
+plot4_normal
+k5
+plot5
+plot5_normal
+k6
+plot6
+plot6_normal
+k7
+plot7
+plot7_normal
+k8
+plot8
+plot8_normal
+k9
+plot9
+plot9_normal
+k10
+plot10
+plot10_normal
+
+
+
+```
+
+```{r}
+set.seed(123)
+#Plot the within-cluster sum of squares for each value of k 
+fviz_nbclust(arrest_data_scaled, kmeans, method = "wss")
+
+```
+Based on the within-cluster sum of squares plotting from above, we can see that the optimal number of clusters is 4.
+This is because there is an elbow in the plot after the fourth cluster
+
+```{r}
+library(tidyverse)  # data manipulation
+library(cluster)    # clustering algorithms
+library(factoextra)
+
+df <- USArrests
+df <- na.omit(df)
+df <- scale(df)
+
+distance <- get_dist(df)
+fviz_dist(distance, gradient = list(low = "#00AFBB", mid = "white", high = "#FC4E07"))
+
+k2 <- kmeans(df, centers = 2, nstart = 25)
+str(k2)
+k2
+fviz_cluster(k2, data = df)
+df %>%
+  as_tibble() %>%
+  mutate(cluster = k2$cluster,
+         state = row.names(USArrests)) %>%
+  ggplot(aes(UrbanPop, Murder, color = factor(cluster), label = state)) +
+  geom_text()
+
+k3 <- kmeans(df, centers = 3, nstart = 25)
+k4 <- kmeans(df, centers = 4, nstart = 25)
+k5 <- kmeans(df, centers = 5, nstart = 25)
+
+# plots to compare
+p1 <- fviz_cluster(k2, geom = "point", data = df) + ggtitle("k = 2")
+p2 <- fviz_cluster(k3, geom = "point",  data = df) + ggtitle("k = 3")
+p3 <- fviz_cluster(k4, geom = "point",  data = df) + ggtitle("k = 4")
+p4 <- fviz_cluster(k5, geom = "point",  data = df) + ggtitle("k = 5")
+
+library(gridExtra)
+grid.arrange(p1, p2, p3, p4, nrow = 2)
+
+set.seed(123)
+
+# function to compute total within-cluster sum of square 
+wss <- function(k) {
+  kmeans(df, k, nstart = 10 )$tot.withinss
+}
+
+# Compute and plot wss for k = 1 to k = 15
+k.values <- 1:10
+
+# extract wss for 2-15 clusters
+wss_values <- map_dbl(k.values, wss)
+
+plot(k.values, wss_values,
+       type="b", pch = 19, frame = FALSE, 
+       xlab="Number of clusters K",
+       ylab="Total within-clusters sum of squares")
+
+
+fviz_nbclust(df, kmeans, method = "wss")
+```
+
+#Question 3
+
+```{r}
+white_wine_data <- read.csv('https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv', header = TRUE, sep = ";")
+summary(white_wine_data)
+head(white_wine_data)
+```
+
+```{r}
+#Observe the variance among the features to decide whether to scale or not
+
+print(apply(white_wine_data,2,var))
+```
+When observing the variance of each feature, it is observed that free.sulfur.dioxide and total.sulfur.dioxide have high variance
+when compared to the other features and so we perform scaling to bring them all to the same scale.
+
+```{r}
+#Perform scaling
+white_wine_data_scaled <- scale(white_wine_data, center = TRUE, scale=TRUE)
+
+```
+
+```{r}
+#Performing hierarchical clustering using single linkage
+single_linkage_clust <- hclust(dist(white_wine_data_scaled[ , 1:ncol(white_wine_data_scaled)-1]), method = "single")
+plot(single_linkage_clust, cex = 0.3, hang = -1, main = "Single Linkage")
+```
+The clusters for single linkage merged around distance: 6
+
+
+```{r}
+#Performing hierarchical clustering using complete linkage
+complete_linkage_clust <- hclust(dist(white_wine_data_scaled[ , 1:ncol(white_wine_data_scaled)-1]),method = "complete")
+plot(complete_linkage_clust, cex = 0.3, hang = -1, main = "Complete Linkage")
+```
+
+The clusters for complete linkage merged around distance: 21
+
+From above, we can see that complete linkage produces a more balanced clustering 
+
+
+```{r}
+single_linkage_cut = cutree(single_linkage_clust,k=2)
+complete_linkage_cut = cutree(complete_linkage_clust,k=2)
+```
+
+```{r}
+#Summary statistics for single linkage
+
+#Get summary statistics and check how many observations are in each cluster
+print(table(single_linkage_cut))
+
+print(table(single_linkage_cut,white_wine_data$quality))
+
+summary(white_wine_data_scaled[ , 1:ncol(white_wine_data_scaled)-1],by=single_linkage_cut)
+
+single_linkage_clust
+```
+
+```{r}
+#Summary statistics for complete linkage
+
+#Get summary statistics and check how many observations are in each cluster
+print(table(complete_linkage_cut))
+
+print(table(complete_linkage_cut,white_wine_data$quality))
+
+summary(white_wine_data_scaled[ , 1:ncol(white_wine_data_scaled)-1],by=complete_linkage_cut)
+
+complete_linkage_clust
+
+```
+
+
+
+

@@ -1,0 +1,103 @@
+```{r}
+#Question 3
+library("readxl")
+library(corrplot)
+library(mgcv)
+library(visreg)
+
+concrete_data <- read_excel("D:\\Users\\giris\\Downloads\\Concrete_Data.xls")
+colnames(concrete_data)= c("c1","c2","c3","c4","c5","c6","c7","c8","CCS")
+summary(concrete_data)
+
+```
+```{r}
+concrete_data = concrete_data[c("c1","c2","c3","c4","c5","c6", "CCS")]
+summary(concrete_data)
+```
+```{r}
+
+corrplot(cor(concrete_data), method="number")
+
+```
+```{r}
+GAM1 <- gam(CCS ~ c1+c2+c3+c4+c5+c6, data=concrete_data)
+summary(GAM1)
+
+```
+
+```{r}
+GAM2 <- gam(CCS ~ s(c1)+s(c2)+s(c3)+s(c4)+s(c5)+s(c6) , data=concrete_data)
+summary(GAM2)
+
+
+```
+```{r}
+GAM1.sse <- sum(fitted(GAM1) - concrete_data$CCS)^2
+GAM1.ssr <- sum(fitted(GAM1) - mean(concrete_data$CCS))^2
+GAM1.sst = GAM1.sse + GAM1.ssr
+
+cat("R-square value of GAM without smoothing:", 1 - (GAM1.sse/GAM1.sst))
+
+```
+
+```{r}
+GAM2.sse <- sum(fitted(GAM2) - concrete_data$CCS)^2
+GAM2.ssr <- sum(fitted(GAM2) - mean(concrete_data$CCS))^2
+GAM2.sst = GAM2.sse + GAM2.ssr
+
+cat("R-square value of GAM with smoothing:", 1 - (GAM1.sse/GAM1.sst))
+```
+
+```{r}
+anova.gam(GAM1, GAM2, test = "Chisq")
+```
+
+```{r}
+visreg(GAM1,'c1')
+```
+
+```{r}
+visreg(GAM2,'c1')
+```
+
+```{r}
+visreg(GAM1,'c2')
+```
+
+```{r}
+visreg(GAM2,'c2')
+```
+
+```{r}
+visreg(GAM1,'c3')
+```
+
+```{r}
+visreg(GAM2,'c3')
+```
+
+```{r}
+visreg(GAM1,'c4')
+```
+
+```{r}
+visreg(GAM2,'c4')
+```
+
+```{r}
+visreg(GAM1,'c5')
+```
+
+```{r}
+visreg(GAM2,'c5')
+```
+
+```{r}
+visreg(GAM1,'c6')
+```
+
+```{r}
+visreg(GAM2,'c6')
+```
+
+

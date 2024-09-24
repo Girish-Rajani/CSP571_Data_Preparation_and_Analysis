@@ -1,0 +1,111 @@
+---
+title: "DPA Assignment 4"
+author: ""
+date: ""
+output:
+  word_document: default
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+
+
+#Question 3
+```{r}
+#install.packages("tm")
+library(tm)
+library(e1071)
+library(rpart)
+library(rpart.plot)
+library(caret)
+library(randomForest)
+```
+
+```{r}
+data <- read.csv("D:\\Users\\giris\\Downloads\\SMSSpamCollection",header = FALSE,sep = "\t", quote = "", stringsAsFactors=FALSE)
+colnames(data) <- c("Class", "Hamspam")
+
+#Changing our response variable quality to a categorical value
+data$Class <- as.factor(data$Class)
+
+print(data)
+head(data)
+```
+
+```{r}
+VectorSource <- VCorpus(VectorSource(data$Hamspam))
+
+VectorSource <- tm_map(VectorSource, content_transformer(tolower))
+
+VectorSource <- tm_map(VectorSource, removeWords, stopwords("en"))
+
+VectorSource <- tm_map(VectorSource, stripWhitespace)
+
+VectorSource <- tm_map(VectorSource, removePunctuation)
+```
+
+```{r}
+dtm <- DocumentTermMatrix(VectorSource)
+dtm
+
+features <- findFreqTerms(dtm, 10)
+```
+
+```{r}
+#split the data into a training and test set
+dtm_train = dtm[1:4049,]
+dtm_test = dtm[4050:5574,]
+
+train_Y <- data[1:4049, ]$Class
+train_Y <- as.factor(train_Y)
+test_Y <- data[4050:5574, ]$Class
+test_Y <- as.factor(test_Y)
+
+```
+
+
+```{r}
+#create a Document Term Matrix
+freq_dtm_train <- dtm_train[, features]
+freq_dtm_test <- dtm_test[, features]
+```
+
+```{r}
+#Convert the DocumentTermMatrix train/test
+
+count <- function(x) {x <- ifelse(x > 0, "1", "0")}
+
+#Apply boolean
+train <- apply(freq_dtm_train, MARGIN = 2,count)
+test <- apply(freq_dtm_test, MARGIN = 2, count)
+train <- as.data.frame(train)
+test <- as.data.frame(test)
+
+```
+
+```{r}
+#fit a naiveBayes model
+fit_train = naiveBayes(train,train_Y)
+fit_test = naiveBayes(test,test_Y)
+
+#Perform prediction
+train_pred = predict(fit_train,train)
+test_pred = predict(fit_test,test)
+```
+
+```{r}
+#Show confusion matrix for training data after prediction to observe accuracy
+train_cm <- confusionMatrix(train_pred,train_Y)
+train_cm
+```
+
+
+```{r}
+#Show confusion matrix for testing data after prediction to observe accuracy
+test_cm <- confusionMatrix(test_pred,test_Y)
+test_cm
+```
+
+
+

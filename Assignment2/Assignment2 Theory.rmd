@@ -1,0 +1,15 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+#4a
+
+Since we are assuming that $X$ is uniformly (evenly) distributed on $[0,1]$ and we wish to predict a test observation's response using only observations that are within 10% of the range of X closest to that test observation, we can say that:
+
+$X \in [0.05,0.95]$ which means the intervals will be $[X-0.05, X+0.05]$ and the length will be 0.1 (10%).
+
+$\int_{0.05}^{0.95} 10dx =$ 10%
+
+Therefore, the fraction of the available observations that will be used to make the prediction will be 10%
+

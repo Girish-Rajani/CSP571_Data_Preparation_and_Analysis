@@ -1,0 +1,57 @@
+---
+title: "test"
+output: html_document
+date: "2023-04-23"
+---
+
+```{r}
+
+We have the following equation:
+$$\frac{1}{|C_k|} \sum _{i, i^{’} \in C_k} \sum _{j=1}^{p} (x _{ij} - x _{i^{’}j})^2 = 2\sum _{i \in C_k} \sum _{j=1}^{p} (x _{ij} - \bar{x} _{kj})^2 \tag{10.12}$$
+
+Where, $\bar{x} _{kj} = \frac{1}{|C_k|} \sum _{i \in C_k} x _{ij}$ is the mean for feature $j$ in cluster $C_k$.
+
+Expanding the LHS over i:
+
+$$ 
+\frac{1}{|C_k|}\sum_{i,i' \in C_k}\sum_{j=1}^p (x_{ij}-x_{i'j})^2 = 
+    \frac{1}{|C_k|}\sum_{i' \in C_k}\sum_{j=1}^p (x_{1j}-x_{i'j})^2 + 
+    \frac{1}{|C_k|}\sum_{i' \in C_k}\sum_{j=1}^p (x_{2j}-x_{i'j})^2 + ...
+$$
+
+
+
+Further expanding a single term from the summation:
+
+
+$$
+\begin{aligned}
+\frac{1}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p (x_{ij}-x_{i'j})^2 
+   &= \frac{1}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p ((x_{ij}-\bar{x}_j)-(x_{i'j}-\bar{x_j}))^2 \\
+   &=\frac{1}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p ((x_{ij}-\bar{x}_j)^2-2(x_{ij}-\bar{x}_j)(x_{i'j}-\bar{x_j})+(x_{i'j}-\bar{x_j})^2) \\
+   &=\frac{1}{|C_k|}\sum_{i \in C_k}\sum_{j=1}^p (x_{ij}-\bar{x}_j)^2
+      -\frac{2}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p(x_{ij}-\bar{x}_j)(x_{i'j}-\bar{x_j}) 
+      +\frac{1}{|C_k|}\sum_{i' \in C_k}\sum_{j=1}^p(x_{i'j}-\bar{x_j})^2 \\
+   &=\frac{2}{|C_k|}\sum_{i \in C_k}\sum_{j=1}^p (x_{ij}-\bar{x}_j)^2
+-\frac{2}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p(x_{ij}-\bar{x}_j)(x_{i'j}-\bar{x_j})
+\end{aligned}
+$$
+
+Substituting the final term from above in the summation:
+
+$$ 
+2\frac{|C_k|}{|C_k|}\sum_{i \in C_k}\sum_{j=1}^p (x_{ij}-\bar{x}_j)^2
+\underbrace{-\frac{2}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p(x_{1j}-\bar{x}_j)(x_{i'j}-\bar{x_j})
+-\frac{2}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p(x_{2j}-\bar{x}_j)(x_{i'j}-\bar{x_j})+...}_{\text{This term is equal to zero because}\sum_{i' \in C_k}x_{i'j}-|C_k| \bar{x_j}=0}
+$$
+
+The remaining term is:
+
+$$
+\begin{aligned}
+2\frac{|C_k|}{|C_k|}\sum_{i \in C_k}\sum_{j=1}^p (x_{ij}-\bar{x}_j)^2
+\qquad\text{Proving 10.12}
+\end{aligned}
+$$
+
+```

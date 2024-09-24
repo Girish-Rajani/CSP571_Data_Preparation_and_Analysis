@@ -1,0 +1,632 @@
+---
+title: "DPA Assignment 2"
+author: "Girish Rajani"
+date: "2023-02-19"
+output:
+  word_document: default
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+#Recitation Problems
+
+#Chapter 4
+#4a
+
+Since we are assuming that $X$ is uniformly (evenly) distributed on $[0,1]$ and we wish to predict a test observation's response using only observations that are within 10% of the range of X closest to that test observation, we can say that:
+
+$X \in [0.05,0.95]$ which means the intervals will be $[X-0.05, X+0.05]$ and the length will be 0.1 (10%).
+
+$\int_{0.05}^{0.95} 10dx =$ 10%
+
+Therefore, the fraction of the available observations that will be used to make the prediction will be 10%
+
+#4b
+
+Since we assume that $(X_1,X_2)$ are uniformly distributed on $[0,1]*[0,1]$ each with measurements on $p = 2$ features, the fraction of available observations that will be used to make the prediction will be the product of the two observations using the fraction from $(a)$ above:
+
+the length will be $0.1*0.1 = 0.01 = 1$%
+
+Therefore, the fraction of the available observations that will be used to make the prediction will be 1%
+
+#4c
+
+Since we have a set of observations on $p = 100$ features and the observations are again uniformly distributed on each feature where each feature ranges in value from 0 to 1, we can say that:
+
+$0.1^{p}*100 = 0.1^{100}*100$ is the fraction of the available observations that will be used to make the prediction.
+
+#4d
+
+Answers to part (a)-(c):
+- When $p = 1$, the fraction of the available observations used to make the prediction was $0.1$
+
+- When $p = 2$, the fraction of the available observations used to make the prediction was $0.01$
+
+- When $p = 100$, the fraction of the available observations used to make the prediction was $0.1^{100}*100$ which is significantly smaller
+
+$\displaystyle \lim_{x \to \infty} (10$%$)^{p} = 0$
+
+From the above, we can conclude that a drawback of KNN when p is large, there are very few training observations "near" any given test observation.
+
+#4e
+
+- For $p = 1$, the length of each side is $(0.1)^{1/1} = 0.1$
+- For $p = 2$, the length of each side is $(0.1)^{1/2} = 0.32$
+- For $p = 100$, the length of each side is $(0.1)^{1/100} = 0.98$
+
+Comment:
+
+From the above, we can say that as $p$ increases, the length of each side gets closer to 1.
+
+#6a
+
+$$
+\begin{aligned}
+P(X) &= \frac{\exp(\hat\beta_0 + \hat\beta_1X_1 + \hat\beta_2X_2)}{1 + \exp(\hat\beta_0 + \hat\beta_1X_1 + \hat\beta_2X_2)}\\ \\
+P(X) &= \frac{\exp(-6 + (0.05*40) + (1*3.5))}{1 + \exp(-6 + (0.05*40) + (1*3.5))}\\ \\
+P(X) &= \frac{\exp(-0.5)}{1+\exp(-0.5)} = 0.38 
+\end{aligned}
+$$
+#6b
+
+$$
+\begin{aligned}
+\log(\frac{P(X)}{1 - P(X)}) &= \hat\beta_0 + \hat\beta_1X_1 + \hat\beta_2X_2\\
+\log(\frac{0.5}{1 - 0.5}) &= -6 + (0.05*X_1) + (1*3.5)\\ 
+\end{aligned}
+$$
+
+By transposing for $X_1$, we get:
+
+$X_1 = \frac{6-3.5}{0.05}$
+
+$X_1 = 50$ hours.
+
+#7
+
+$$\begin{aligned}
+P(Y=yes|X=4) &= \frac{\pi_{yes}f_{yes}(x)}{\sum_{l=1}^K \pi_lf_l(x)}\\ P(Y=yes|X=4) &= \frac{\pi_{yes}\exp(-1/2\sigma^2(x-\mu_{yes})^2)}{\sum_{l=1}^K\pi_l\exp(-1/2\sigma^2(x-\mu_l)^2)}\\
+P(Y=yes|X=4) &= \frac{0.8\times\exp(-0.5)}{0.8\times\exp(-0.5) + 0.2\times\exp(-16/72)}\\
+P(Y=yes|X=4) &= \frac{0.485}{0.645} = 0.75
+\end{aligned}$$
+
+Assuming that $X$ follows a normal distribution, the probability that a company will issue a dividend this year given that its percentage profit was $X = 4$ last year is $75$%
+
+#9a
+
+$$
+\begin{aligned}
+Odds &= \frac{P(X)}{1-P(X)}\\
+0.37 &= \frac{P(X)}{1-P(X)}
+\end{aligned}$$
+
+Transpose and factorize to make $P(X)$ the subject:
+
+$$
+\begin{aligned}
+0.37 (1-P(X)) = P(X)\\
+0.37 - 0.37P(X) = P(X)\\
+0.37 = P(X) + 0.37P(X)\\
+Factorize P(X):\\
+0.37 = P(X)(1+0.37)\\
+P(X)(1.37) = 0.37\\
+P(X) = \frac{0.37}{1.37} = 0.27
+\end{aligned}$$
+
+#9b
+
+$$Odds = \frac{0.16}{1-0.16}=0.19$$
+#Chapter 5
+#2a
+
+Since the bootstrap sample that is generated has an equal probability, the probability that the first bootstrap observation is the jth observation from the original sample is $\frac{1}{n}$.
+
+Therefore, the probability that the first bootstrap observation is $not$ the jth observation from the original sample is $1-\frac{1}{n}$
+
+#2b
+
+Since bootstrapping has an equal probability of random sampling, the second bootstrap sample does not depend on the first bootstrap sample. 
+
+Therefore, the probability that the second bootstrap observation
+is not the jth observation from the original sample is also $ 1-\frac{1}{n}$
+
+#2c
+
+From the previous question, the probability that a bootstrap observation
+is not the jth observation from the original sample is also $ 1-\frac{1}{n}$, which means that the probability that the jth observation is not in the bootstrap sample is the product of all bootstrap observations not in the sample which is  $(1-\frac{1}{n})^n$
+
+#2d
+
+The probability that the jth observation is in the bootstrap sample is $1 - (1-1/n)^n$
+
+$p = 1 - (1-1/5)^5 = 0.67$
+
+#2e
+
+$p = 1 - (1-1/100)^{100} = 0.634$
+
+#2f
+
+$p = 1 - (1-1/10000)^{10000} = 0.632$ 
+
+#2g
+
+```{r}
+n <- 1:100000
+
+#The probability that the jth observation is in the bootstrap sample
+prob <- 1-(1-1/n)^n
+
+plot(n,prob, main = "Probability for each integer")
+```
+#From above we can observe that initially, the probability significantly decreases to 0.63 (also observed in 2e and 2f) then remains the same throughout.
+
+#2h
+
+```{r}
+store=rep(NA, 10000)
+for(i in 1:10000){
+  store[i] = sum(sample(1:100, rep=TRUE)==4)>0
+}
+mean(store)
+```
+From above, we can observe that the probability is very similar to that obtained in 2e and 2f above 
+
+#3a
+
+k-fold cross validation involves dividing the data in K subsets of equal size. We then use K-1 folds for training and the first fold is used as the validation set. The MSE of this group is computed as per normal. This process is repeated for K number of folds where the fold used for the validation set changes each time. At the end, we will have an MSE for each k estimates and the final k-fold cross validation MSE is computed by averaging the results.
+
+#3bi
+
+The advantage of k-fold cross-validation compared to the validation set is that it has lower variance on the test error. Secondly, k-fold cross validation has higher accuracy, efficiency and prevents overestimating the test error since at some point, we are using the entire data set when compared to validation set which only uses a subset.
+
+The disadvantage of k-fold cross-validation compared to the validation set is that is computationally more expensive and difficult to implement because k-fold cv has to rerun training k times whereas just using a validation set will only have to train once on that set.
+
+#3bii
+
+The advantage of k-fold cross-validation compared to LOOCV is that since LOOCV has to fit the method n times which is more than k-fold CV k times, k-fold cross validation is computationally less expensive. Secondly, K-fold cross validation gives a more accurate result on test error when compared to LOOCV.
+
+The disadvantage of k-fold cross-validation compred to LOOCV is that when perform bias reduction, we would prefer to use LOOCV since it has a lower bias than k-fold cross validation.
+
+```{r}
+#Practicum Problems
+#Problem 1
+library(caret)
+library(corrplot)
+library(ROCR)
+
+#Load data from UCI repository
+abalone_data <- read.csv(file="https://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data", col.names= c ("Sex", "Length", "Diameter", "Height", "Whole weight", "Shucked weight", "Viscera weight", "Shell weight", "Rings"))
+
+#Remove all observations in the Infant Category
+abalone_data <- abalone_data[!abalone_data$Sex == 'I',]
+
+#Using str(abalone_data), we see that Sex data type is char so we change it to factor
+#Turn Sex feature into a factor from char
+abalone_data$Sex <- factor(abalone_data$Sex)
+
+#Showing data types, summary and first 6 rows of dataset
+str(abalone_data)
+summary(abalone_data)
+head(abalone_data)
+```
+
+```{r}
+
+#Using createDataPartition to perform 80/20 train-test split
+
+datasetPartition <- createDataPartition(abalone_data$Sex, p = 0.8, list = FALSE, times = 1)
+
+train <- abalone_data[datasetPartition,]
+test <- abalone_data[-datasetPartition,]
+
+dim(train)
+dim(test)
+```
+
+
+```{r}
+#Using glm to fit a logistic regression
+set.seed(10)
+glm.fits <- glm(Sex ~ Length + Diameter + Height + Whole.weight + Shucked.weight + Viscera.weight + Shell.weight + Rings, data = train, family = binomial)
+
+summary(glm.fits)
+```
+From above, we can see that the predictors that are relevant, have a lower p-value. Such predictors include Diameter, Shucked.weight, and Viscera.weight where Shucked.weight is the most significant because it has the lowest p-value. 
+
+This is also an indicator that since Shucked.weight and Viscera.weight have a low p-value, they are more likely to reject the null hypothesis which means there is a relationship between the predictors Shucked.weight and Viscera.weight with the response Sex.
+
+```{r}
+
+#Using coef to show the coefficients of the fitted model
+summary(glm.fits)$coef
+
+
+```
+
+
+```{r}
+#Confidence Intervals for the predictors
+confint(glm.fits)
+```
+The confidence intervals for all predictors contain 0 within their range except for Shucked.weight and Viscera.weight. This also means that both of these predictors cannot accept the null hypothesis. Since all other predictors accept the null hypothesis, there is no relationship between those predictors and the response.
+
+```{r}
+#Use predict() function to perform prediction on test data
+glm.predict <- predict(glm.fits, test, type = "response")
+```
+
+```{r}
+glm.predict
+```
+
+
+```{r}
+#Convert Sex Probabilities to "M" if >0.5 else "F" and change it to a factor from char
+sex.prob <- ifelse(glm.predict > 0.5, "M", "F")
+sex.prob <- factor(sex.prob)
+
+#Create confusion matrix
+confusionMatrix(sex.prob, test$Sex)
+```
+
+```{r}
+#Random classifier ROC
+roc.predict <- prediction(glm.predict, test$Sex)
+
+#Measure performance of Random Classifier on TPR and FPR
+roc.perform <- performance(roc.predict, measure = "tpr", x.measure = "fpr")
+plot(roc.perform, main="Random Classifier ROC Curve")
+#Plot AUC
+abline(0,1)
+
+```
+
+```{r}
+
+#Measure performance of Random Classifier on Accuracy
+roc.perform <- performance(roc.predict, measure = "acc")
+plot(roc.perform, main="Random Classifier ROC Accuracy")
+
+
+```
+
+From the above ROC Plots, we can see that our random classifier performs slightly above the random choice resulting in a higher AUC. This means that the model has a higher chance of predicting 'M' as 'M' and 'F' as 'F' (Since it has a higher TPR compared to FPR). 
+
+From the second plot above, we can estimate that the accuracy is around 52% at the 50% cutoff point. Our logistic regression model had an accuracy of 53% so we can say the accuracy of our logistic regression model and random classifier ROC are very similar in performance.
+
+```{r}
+#Plotting the correlations between the predictors
+corrplot(cor(abalone_data[,-1]), method = "number")
+```
+From the above correlations, we can see that many of the predictors have a high correlation. The only feature that has a weak relationship is Rings. 
+
+This means that the performance of the classifier is not great because since we have high correlation, a change in one variable would result in a change in another. This is not good for a model as it can result in fluctuations and instability.
+```{r}
+#Problem 2
+library(e1071)
+
+#Load data from UCI repository
+mushroom_data <- read.csv(file="https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.data", col.names= c ("Class", "cap-shape", "cap-surface", "cap-color", "bruises", "odor", "gill-attachment", "gill-spacing", "gill-size", "gill-color", "stalk-shape", "stalk-root", "stalk-surface-above-ring", "stalk-surface-below-ring", "stalk-color-above-ring", "stalk-color-below-ring", "veil-type", "veil-color", "ring-number", "ring-type", "spore-print-color", "population", "habitat"))
+
+```
+
+```{r}
+#Replace missing values "?" with NA's
+mushroom_data[mushroom_data == "?"]<- NA 
+
+#Check how many rows have NA's
+sum(is.na(mushroom_data))
+
+#Omit all records containing NA's
+mushroom_data <- na.omit(mushroom_data)
+
+#Confirm that there aren't any NA's left
+sum(is.na(mushroom_data))
+```
+From above, we can see that initially, there are 2480 samples that have NA's out of 8123 total samples. This means that a good portion of the sample contains missing values and if we were to replace it with some mean/median, it will affect the results of the model since the data will be biased. 
+
+Therefore we drop the records containing NA's which still leaves us with sufficient samples to train/test
+
+```{r}
+#Turn Class feature into a factor from char
+mushroom_data$Class <- factor(mushroom_data$Class)
+
+#Showing data types, summary and first 6 rows of dataset
+str(mushroom_data)
+summary(mushroom_data)
+head(mushroom_data)
+```
+
+```{r}
+#Using sample function to perform 80/20 train-test split
+sample <- sample(c(TRUE, FALSE), nrow(mushroom_data),replace=TRUE, prob=c(0.8,0.2))
+train <- mushroom_data[sample,]
+test <- mushroom_data[!sample,]
+
+dim(train)
+dim(test)
+
+```
+
+```{r}
+#Creating the Naive Bayes classifier
+nb.fit <- naiveBayes(Class ~ ., data = train)
+nb.fit
+```
+
+```{r}
+#Predicting using the Naive Bayes classifier in-training and in-test
+predict_train = predict(nb.fit, train)
+predict_test = predict(nb.fit, test)
+
+```
+
+```{r}
+#Calculating the accuracy of the classifiers
+
+
+cat("Accuracy of the classifier in-training: ",mean(predict_train == train$Class) *100,"%")
+
+cat("\nAccuracy of the classifier in-test: ",mean(predict_test == test$Class) *100,"%")
+```
+
+```{r}
+#Using table function to create a confusion matrix of predicted vs actual classes
+
+table(predict_test, test$Class)
+```
+#The model produced 58 false positives
+
+```{r}
+#Question 3
+
+#Load data from UCI repository
+yacht_data <- read.table("https://archive.ics.uci.edu/ml/machine-learning-databases/00243/yacht_hydrodynamics.data", col.names= c ("Longitudinal position", "Prismatic coefficient", "Length displacement ratio", "Beam draught ratio", "Length beam ratio", "Froude number", "Residuary resistance"))
+
+
+#Showing data types, summary and first 6 rows of dataset
+str(yacht_data)
+summary(yacht_data)
+head(yacht_data)
+```
+
+```{r}
+#Using createDataPartition to perform 80/20 train-test split
+set.seed(10)
+datasetPartition <- createDataPartition(yacht_data$Residuary.resistance, p = 0.8, list = FALSE, times = 1)
+
+train <- yacht_data[datasetPartition,]
+test <- yacht_data[-datasetPartition,]
+
+dim(train)
+dim(test)
+
+```
+
+```{r}
+#Using lm to fit model
+lm.fits <- lm(Residuary.resistance ~., data = train)
+
+summary(lm.fits)
+```
+
+```{r}
+
+#Creating our own function for MSE and RMSE Calculations
+MSE <- mean(lm.fits$residuals^2)
+RMSE <- sqrt(MSE)
+
+cat("Mean Square Error: ", MSE)
+cat(", Root Mean Square Error: ", RMSE)
+
+
+```
+# Training MSE is 81.54859, RMSE is 9.030426, and R^2 is 0.6522
+
+```{r}
+#Using the trainControl method to perform a bootstrap
+fitControl <- trainControl(method="boot", number = 1000)
+
+lm.fits2 <- train(Residuary.resistance~., data = train, method = "lm", trControl = fitControl)
+```
+
+```{r}
+#Showing results from bootstrap resampling
+summary(lm.fits2$resample)
+
+mse_boot = mean(lm.fits2$resample$RMSE)^2
+rmse_boot = mean(lm.fits2$resample$RMSE)
+r2_boot = mean(lm.fits2$resample$Rsquared)
+
+cat("Mean Square Error - Bootstrap: ", mse_boot)
+cat(", Root Mean Square Error - Bootstrap: ", rmse_boot)
+cat(", R^2 - Bootstrap: ", r2_boot)
+```
+#Bootstrap Model Training MSE is 89.1627, RMSE is 9.4426 and R^2 is 0.6316
+
+#The bootstrap Model has a slightly higher MSE and RMSE compared to the intial model showing a slight decrease in performance
+
+```{r}
+#Plotting histogram of the RMSE values using hist
+hist(lm.fits2$resample$RMSE, xlab = "RMSE", main = "Histogram of RMSE", col = "blue")
+```
+
+```{r}
+#Perform prediction on test set for original and bootstrap models
+y_hat_original <- predict(lm.fits,test)
+y_hat_bootstrap <- predict(lm.fits2,test)
+
+y_test <- test$Residuary.resistance
+```
+
+```{r}
+#y_hat_bootstrap
+#y_hat_original
+#Compute testing MSE, RMSE, and R^2 for original and bootstrap models
+
+
+test_mse_original <- mean((y_test - y_hat_original)^2)
+test_rmse_original <- sqrt(test_mse_original)
+RSS_original <- sum((y_test - y_hat_original)^2)
+TSS_Original <- (sum((y_test - mean(y_test))^2))
+test_rsquared_original <- 1-(RSS_original/TSS_Original)
+
+test_mse_bootstrap <- mean((y_test - y_hat_bootstrap)^2)
+test_rmse_bootstrap <- sqrt(test_mse_bootstrap)
+RSS_bootstrap <- sum((y_test - y_hat_bootstrap)^2)
+TSS_bootstrap <- (sum((y_test - mean(y_test))^2))
+test_rsquared_boostrap <- 1-(RSS_bootstrap/TSS_bootstrap)
+```
+
+```{r}
+cat("Original Testing MSE : ", test_mse_original)
+cat(" Bootstrap Testing MSE : ", test_mse_bootstrap)
+```
+
+```{r}
+cat("Original Testing RMSE : ", test_rmse_original)
+cat(" Bootstrap Testing RMSE : ", test_rmse_bootstrap)
+```
+
+```{r}
+cat("Original Testing R^Squared : ", test_rsquared_original)
+cat(" Bootstrap Testing R^Squared : ", test_rsquared_boostrap)
+```
+From above, we can see that both the original and bootstrap model have identical testing MSE, RMSE, and R^Squared.
+
+
+```{r}
+#Problem 4
+
+#Load data from UCI repository
+German_credit_data <- read.csv('https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/german/german.data-numeric', sep= '', header = F )
+
+#Using str(German_credit_data), we see that the last feature data type is int so we change it to factor
+
+#Turn final column into a factor from int
+German_credit_data$V25 <- factor(German_credit_data$V25)
+
+#Showing data types, summary and first 6 rows of dataset
+str(German_credit_data)
+summary(German_credit_data)
+head(German_credit_data)
+
+```
+
+```{r}
+#Using createDataPartition to perform 80/20 train-test split
+
+datasetPartition <- createDataPartition(German_credit_data$V25, p = 0.8, list = FALSE, times = 1)
+
+train <- German_credit_data[datasetPartition,]
+test <- German_credit_data[-datasetPartition,]
+
+dim(train)
+dim(test)
+
+```
+
+```{r}
+#Using glm to fit a logistic regression
+set.seed(10)
+
+glm.fits <- glm(V25 ~ ., data = train, family = binomial)
+
+summary(glm.fits)
+
+```
+
+```{r}
+#Convert V25 fitted values from the model to 2 if >0.5 else 1 and change it to a factor from int
+v25.prob <- ifelse(glm.fits$fitted.values > 0.5,2,1)
+v25.prob <- factor(v25.prob)
+
+#Create confusion matrix to use later to find training precision/recall and F1  results
+confusion_matrix <- confusionMatrix(v25.prob, train$V25, mode="everything")
+confusion_matrix
+
+```
+
+```{r}
+#Training Precision/Recall and F1 Results
+cat("Training Precision: ", confusion_matrix$byClass[5])
+cat("\nTraining Recall: ", confusion_matrix$byClass[6])
+cat("\nTraining F1: ", confusion_matrix$byClass[7])
+
+
+```
+
+```{r}
+#Using the trainControl method to perform a cross validation
+fitControl <- trainControl(method="cv", number = 10)
+
+glm.fits2 <- train(V25~., data = train, method = "glm", family = "binomial", trControl = fitControl)
+```
+
+```{r}
+#Convert V25 fitted values from the cv model to 2 if >0.5 else 1 and change it to a factor from int
+v25_cv.prob <- ifelse(glm.fits2$finalModel$fitted.values > 0.5,2,1)
+v25_cv.prob <- factor(v25_cv.prob)
+
+#Create confusion matrix to use later to find cross-validated training precision/recall and F1  results
+confusion_matrix_cv <- confusionMatrix(v25_cv.prob, train$V25, mode="everything")
+confusion_matrix_cv
+```
+
+```{r}
+#Training Precision/Recall and F1 Results for cv model
+cat("Cross-Validated Training Precision: ", confusion_matrix_cv$byClass[5])
+cat("\nCross-Validated Training Recall: ", confusion_matrix_cv$byClass[6])
+cat("\nCross-Validated Training F1: ", confusion_matrix_cv$byClass[7])
+```
+From above, we can see that the cross-validated training precision/recall and F1 values are the exact same as the original fit
+
+```{r}
+#Use predict.glm() function to perform prediction on test data using original model
+glm.predict <- predict.glm(glm.fits, test, type = "response")
+
+#Convert V25 fitted values from the model to 2 if >0.5 else 1 and change it to a factor from int
+v25_test.prob <- ifelse(glm.predict > 0.5,2,1)
+v25_test.prob <- factor(v25_test.prob)
+
+
+#Create confusion matrix to use later to find testing precision/recall and F1  results
+confusion_matrix_test <- confusionMatrix(v25_test.prob, test$V25, mode="everything")
+confusion_matrix_test
+```
+
+```{r}
+#Testing Precision/Recall and F1 Results on Original model
+cat("Testing Precision: ", confusion_matrix_test$byClass[5])
+cat("\nTesting Recall: ", confusion_matrix_test$byClass[6])
+cat("\nTesting F1: ", confusion_matrix_test$byClass[7])
+```
+
+```{r}
+#Use predict() function to perform prediction on test data using cv model
+glm_cv.predict <- predict(glm.fits2, test)
+
+#Create confusion matrix to use later to find testing precision/recall and F1  results
+confusion_matrix_test_cv <- confusionMatrix(glm_cv.predict, test$V25, mode="everything")
+confusion_matrix_test_cv
+```
+
+```{r}
+#Testing Precision/Recall and F1 Results for cv model
+cat("Cross-Validated Testing Precision: ", confusion_matrix_test_cv$byClass[5])
+cat("\nCross-Validated Testing Recall: ", confusion_matrix_test_cv$byClass[6])
+cat("\nCross-Validated Testing F1: ", confusion_matrix_test_cv$byClass[7])
+```
+From above, we can see that the cross-validated testing precision/recall and F1 values are the exact same as the original fit
+
+#4a
+
+Since we are assuming that $X$ is uniformly (evenly) distributed on $[0,1]$ and we wish to predict a test observation's response using only observations that are within 10% of the range of X closest to that test observation, we can say that:
+
+$X \in [0.05,0.95]$ which means the intervals will be $[X-0.05, X+0.05]$ and the length will be 0.1 (10%).
+
+$\int_{0.05}^{0.95} 10dx =$ 10%
+
+Therefore, the fraction of the available observations that will be used to make the prediction will be 10%

@@ -1,0 +1,283 @@
+---
+title: "DPA Assignment 1"
+author: "Girish"
+date: "2023-01-17"
+output:
+  pdf_document: default
+  word_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r}
+#Problem 1
+setwd("D:/Users/giris/Documents/IIT/R Datasests/")
+
+library (datasets)
+
+#Load iris sample dataset into dataframe
+iris_data <- data.frame(iris)
+
+#Assigning a name for each feature
+sep_len <- iris_data$Sepal.Length
+sep_wid <- iris_data$Sepal.Width
+pet_len <- iris_data$Petal.Length
+pet_wid <- iris_data$Petal.Width
+species <- iris_data$Species
+
+#Showing summary and first 6 rows of iris dataset
+summary(iris_data)
+head(iris_data)
+
+```
+#Creating box plot of each of the 4 features
+```{r}
+#Sepal Length Box Plot 
+boxplot(sep_len,data=iris_data, main="Sepal Length",
+   ylab="Value")
+
+#Sepal Width Box Plot 
+boxplot(sep_wid,data=iris_data, main="Sepal Width",
+   ylab="Value")
+
+#Petal Length Box Plot
+boxplot(pet_len,data=iris_data, main="Petal Length",
+   ylab="Value", col = "Yellow")
+
+#Petal Width Box Plot 
+boxplot(pet_wid,data=iris_data, main="Petal Width",
+   ylab="Value")
+```
+
+
+```{r}
+#Compute Empirical IQR of each feature
+sep_len_iqr = IQR(sep_len)
+sep_wid_iqr = IQR(sep_wid)
+pet_len_iqr = IQR(pet_len)
+pet_wid_iqr = IQR(pet_wid)
+
+sprintf("Sepal Length Empirical IQR - %f", sep_len_iqr)
+sprintf("Sepal Width Empirical IQR - %f", sep_wid_iqr)
+sprintf("Petal Length Empirical IQR - %f", pet_len_iqr)
+sprintf("Petal Width Empirical IQR - %f", pet_wid_iqr)
+```
+#The petal length has the highest Empirical IQR so it is highlighted in Yellow in the plot above
+
+```{r}
+#Calculate the parametric standard deviation for each feature
+
+sep_len_sd = sd(sep_len)
+sep_wid_sd = sd(sep_wid)
+pet_len_sd = sd(pet_len)
+pet_wid_sd = sd(pet_wid)
+
+sprintf("Sepal Length SD - %f", sep_len_sd)
+sprintf("Sepal Width SD - %f", sep_wid_sd)
+sprintf("Petal Length SD - %f", pet_len_sd)
+sprintf("Petal Width SD - %f", pet_wid_sd)
+
+```
+#The results of the standard deviations from above do agree with the empirical values because we can see that the Petal Length feature has both the highest standard deviation and empirical IQR while the Sepal Width feature has both the lowest standard deviation and empirical IQR.
+
+
+```{r}
+#Sepal Length Colored Box Plot 
+boxplot(sep_len~species,data=iris_data, main="Sepal Length", xlab="Species",
+   ylab="Value", col=c("Yellow","Red","Green"))
+
+#Sepal Width Colored Box Plot 
+boxplot(sep_wid~species,data=iris_data, main="Sepal Width", xlab="Species",
+   ylab="Value", col=c("Yellow","Red","Green"))
+
+#Petal Length Colored Box Plot 
+boxplot(pet_len~species,data=iris_data, main="Petal Length", xlab="Species",
+   ylab="Value", col=c("Yellow","Red","Red"))
+
+#Petal Width Colored Box Plot 
+boxplot(pet_wid~species,data=iris_data, main="Petal Width", xlab="Species",
+   ylab="Value", col=c("Yellow","Red","Red"))
+
+#Based on the plots below, the setosa flower type exhibits significantly different Petal Length/Width when separated from the others. We can observe that the Setosa has a much smaller Petal Length/Width when compared to the other flower types.
+```
+
+
+```{r}
+#Problem 2
+library(moments)
+
+#Load trees sample dataset into dataframe
+trees_data <- data.frame(trees)
+
+#Assigning a name for each feature
+girth <- trees_data$Girth
+height <- trees_data$Height
+volume <- trees_data$Volume
+
+#Showing summary and first 6 rows of trees dataset
+summary(trees_data)
+head(trees_data)
+```
+
+```{r}
+#5-number summary of Girth
+fivenum(girth)
+```
+
+
+```{r}
+#5-number summary of Height
+fivenum(height)
+```
+```{r}
+#5-number summary of Volume
+fivenum(volume)
+```
+
+```{r}
+#Creating a histogram for Girth variable
+hist(girth, main="Histogram of Girth Variable",
+     xlab="Girth", col="green")
+```
+
+
+```{r}
+#Creating a histogram for Height variable
+hist(height, main="Histogram of Height Variable",
+     xlab="Height", col="green")
+```
+
+
+```{r}
+#Creating a histogram for Volume variable
+hist(volume, main="Histogram of Volume Variable",
+     xlab="Volume", col="green")
+```
+
+#A normal distribution histogram can be considered to be one that is bell-shaped. Based on the three variable histograms plots above, it can be seen that the Height histogram displays a normal distribution because of this bell-shaped form with only one peak. 
+
+#It can be seen that both Girth and Volume variables exhibit a positive skeweness when compared to the Height histogram because those 2 histograms exhibit some form of positive skeweness since on the left side, we can see larger values and on the right side, we can see smaller values. Height exhibits a slight negative skewness.
+
+```{r}
+#Calculating the skewness of each variable
+library(moments)
+skewness(girth)
+skewness(height)
+skewness(volume)
+```
+#Yes, when looking at the skewness and the visual inspection, we can see that they agree. The Girth and Volume both exhibit a positive skewness (0.53 and 1.06 respectively) while Height exhibits a negative skewness (-0.37).
+
+```{r}
+#Problem 3
+
+#Load data from UCI repository
+auto_mpg_data <- read.csv(file="https://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data", header=F, sep="", as.is =4, col.names=c("mpg","cylinders","displacement","horsepower","weight","acceleration", "model year", "origin", "car name"))
+
+#Showing summary and first 6 rows of dataset
+summary(auto_mpg_data)
+head(auto_mpg_data)
+```
+
+
+
+```{r}
+#Using as.numeric to obtain the column as a numeric vector but would receive error since there is na present
+auto_mpg_data$horsepower <- as.numeric(auto_mpg_data$horsepower)
+```
+```{r}
+#Original mean when the na records were ignored
+original_mean <- mean(auto_mpg_data$horsepower, na.rm=TRUE)
+print(original_mean)
+```
+
+
+```{r}
+#Calculating the median while ignoring na
+median_auto_mpg <- median(auto_mpg_data$horsepower, na.rm=TRUE)
+print(median_auto_mpg)
+```
+
+```{r}
+#Replace na values with median using is.na()
+auto_mpg_data$horsepower[is.na(auto_mpg_data$horsepower)] <- median_auto_mpg
+
+#Using as.numeric to obtain the column as a numeric vector after replacing na with median
+auto_mpg_data$horsepower <- as.numeric(auto_mpg_data$horsepower)
+
+```
+
+
+```{r}
+#New mean when the na records were replaced with median
+new_mean <- mean(auto_mpg_data$horsepower, na.rm=TRUE)
+print(new_mean)
+```
+#We can compare the original mean when NA were ignored which was 104.4694 and the new mean when the na records were replaced with the median which was 104.304. This shows that the mean has slightly decreased.
+
+```{r}
+#Problem 4
+
+#Load the Boston dataset
+library(MASS)
+boston_data <- data.frame(Boston)
+
+#Showing summary and first 6 rows of Boston dataset
+summary(boston_data)
+head(boston_data)
+```
+
+```{r}
+#Using lm to fit a regression between medv and lstat
+fit <- lm(medv~lstat, data=boston_data)
+summary(fit)
+```
+
+```{r}
+#Plotting the resulting fit
+plot(boston_data$lstat, boston_data$medv, col="blue", main = "Regression fit between medv and lstat", xlab = "lstat", ylab = "medv")
+abline(fit)
+```
+
+```{r}
+#Showing a plot of fitted values vs residuals (first plot/top left)
+par (mfrow=c(2,2))
+plot(fit)
+```
+#If we look at the first plot above (fitted values vs residual with the resulting fit), there is a possibility that there is a non-linear relationship present. This can be because we can see a slope (curve) present within the fit which can represent a relationship that is not linear.
+
+
+```{r}
+#Obtaining confidence interval after predicting response values for lstat 5,10 and 15
+predict(fit, data.frame(lstat = (c(5, 10, 15))),interval = "confidence")
+```
+
+```{r}
+#Obtaining prediction interval after predicting response values for lstat 5,10 and 15
+predict(fit, data.frame(lstat = (c(5, 10, 15))),interval = "prediction")
+```
+#It can be seen above that the results are not the same. A possible reason for this is because the prediction interval includes a wider range of values than the confidence interval since the prediction considers both reducible and irreducible error.
+
+
+```{r}
+#Showing a new plot of fitted values vs residuals (first plot/top left) which includes lstat^2
+fit2 <- lm(boston_data$medv ~ boston_data$lstat + I(boston_data$lstat^2), data=boston_data)
+par(mfrow = c(2, 2))
+plot(fit2)
+
+```
+
+```{r}
+#Plotting the relationship between the linear and non-linear fit for comparison
+library(ggplot2)
+ggplot(boston_data,aes(medv,lstat,I(lstat^2)))+geom_point()+geom_smooth(method="lm",se=TRUE)+
+geom_point()
+
+#Showing summary
+summary(fit2)
+```
+#When looking at the multiple R-squared (0.6407) and the adjusted R-squared (0.6393), both are very closely related which means that our model fit the linear and non-linear fit properly and overfitting does not occur.
+
+```{r}
+
+```
+

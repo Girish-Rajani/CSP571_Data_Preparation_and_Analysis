@@ -1,0 +1,529 @@
+---
+title: "DPA Assignment 4"
+author: "Girish Rajani"
+date: "2023-04-09"
+output:
+  word_document: default
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+#Recitation Problems
+
+#Chapter 8
+
+#1
+![](image1a.jpg)
+![](image1b.jpg)
+
+#3
+![](image3.jpg)
+
+#4
+![](image4a.jpg)
+
+![](image4b.jpg)
+
+#5
+
+Majority Vote Approach:
+Number of estimates for P(Class is Red | X) < 0.5 is 4 (4 estimates belong to Green class)
+Number of estimates for P(Class is Red | X) >= 0.5 is 6 (6 estimates belong to Red class)
+
+Using majority vote, the specific value X would be classified as Red since majority of the estimates belong to Red Class
+
+Average Probability Approach:
+Here, we calculate the average of the P(Class is Red | X) from the 10 estimates and if the average value is less than 0.5 we classify the specific value X as Green, else classify it as Red.
+
+Avg Probability = (0.1 + 0.15 + 0.2 + 0.2 + 0.55 + 0.6 + 0.6 + 0.65 + 0.7 + 0.75) / 10 = 4.5/10 = 0.45
+
+Since the average probability is less than 0.5, the specific value X would be classified as Green
+
+#Chapter 9
+
+#1
+
+1a. To sketch the hyperplane $1 + 3X_1 - X_2 = 0$ we can rewrite it in the form of $X_2 = mX_1 + c$ $(y = mx + c)$ which is $X_2 = 3X_1 + 1$
+
+1b. To sketch the hyperplane $-2 + X_1 + 2X_2 = 0$ we can rewrite it in the form of $X_2 = mX_1 + c$ $(y = mx + c)$ which is $X_2 = - X_1 / 2 + 1$
+
+```{r}
+#Create an empty plot
+plot(0,0,xlab = "X1", ylab = "X2", xlim = c(-1, 1), ylim = c(-2, 4),type='l')
+
+#Use abline to create the hyperplane using the intercept (1) and slope (3) in X2 = 3X1 + 1
+abline(a = 1, b = 3, col="darkgreen")
+
+#Indicating the set of points / region for which 1 + 3X_1 - X_2 < 0 and 1 + 3X_1 - X_2 > 0
+text(c(0.5), c(4), "1 + 3X_1 - X_2 < 0", col = "darkgreen") 
+text(c(-0.5), c(-2), "1 + 3X_1 - X_2 > 0", col = "darkgreen")
+
+#Use abline to create the hyperplane using the intercept (1) and slope (-1/2) in X_2 = - X_1 / 2 + 1
+abline(a = 1, b = -1/2, col="darkblue")
+
+#Indicating the set of points / region for which -2 + X_1 + 2X_2 < 0 and -2 + X_1 + 2X_2 > 0
+text(c(0.5), c(0), "-2 + X_1 + 2X_2 < 0", col = "darkblue")
+text(c(-0.5), c(2), "-2 + X_1 + 2X_2 > 0", col = "darkblue")
+```
+#2a and b
+
+The curve $(1 + X_1)^2 + (2 - X_2)^2 = 4$ will be a circle and it can be rewritten in the form: $(x – h)^2 + (y – k)^2 = r^2$ where h and k are the coordinates of the center of the circle and r is the radius of the circle (these 3 parameters will be required to draw the circle)
+
+Rewritten form:
+$(X_1 - (-1))^2 + (-X_2 + 2)^2 = 2^2$ where the coordinates of the center is (-1,2) and radius is 2
+
+```{r}
+#install.packages('plotrix')
+library(plotrix)
+plot(x=seq(-2,2), y=seq(0,4),type="n", xlab='X1', ylab='X2', asp =1)
+
+#draw circle using coordinates of the center as (-1,2) and radius as 2
+draw.circle(-1,2,2)
+
+#Indicating the set of points / region for which (1 + X_1)^2 + (2- X_2)^2 > 4 and (1 + X_1)^2 + (2- X_2)^2 <= 4
+text(c(2), c(0.5), "(1 + X_1)^2 + (2- X_2)^2 > 4", col = "darkblue")
+text(c(-1), c(2), "(1 + X_1)^2 + (2- X_2)^2 <= 4", col = "red")
+points(c(0,2,3),c(0,2,8), col="blue",pch=19)
+points(-1,1, col="red",pch=19)
+
+
+```
+#2c
+Blue class if $(1 + X_1)^2 + (2 - X_2)^2 > 4$ and red class otherwise
+
+(0,0) --> $(1 + 0)^2 + (2 - 0)^2 = 5$ which is > 4 so it belongs to class blue
+
+(-1,1) --> $(1 + (-1))^2 + (2 - 1)^2 = 1$ which is < 4 so it belongs to class red
+
+(2,2) --> $(1 + 2)^2 + (2 - 2)^2 = 9$ which is > 4 so it belongs to class blue
+
+(3,8) --> $(1 + 3)^2 + (2 - 8)^2 = 52$ which is > 4 so it belongs to class blue
+
+#2d
+
+We can expand on $(1 + X_1)^2 + (2 - X_2)^2 = 4$ equation to include $X_1^2$ and $X_2^2$:
+
+$$\begin{aligned}
+(1 + X_1)^2 \\
+(1+X_1)(1+X_1) \\
+1+X_1+X_1+X_1^2 \\
+= 1 + 2X_1 + X_1^2
+\end{aligned}$$
+
+$$\begin{aligned}
+(2 - X_2)^2 \\
+(2 - X_2)(2 - X_2) \\
+4 - 2X_2 - 2X_2 + X_2^2 \\
+= 4 - 4X_2 + X_2^2
+\end{aligned}$$
+
+Combine to get:
+$$\begin{aligned}
+(1 + 2X_1 + X_1^2) + (4 - 4X_2 + X_2^2) = 4\\
+  1+2X_1-4X_2+X_1^2+X_2^2 =0
+\end{aligned}$$
+
+As we can see from above, when we include $X_1^2$ and $X_2^2$, the decision boundary in (c) results in a linear equation
+
+#3a and b
+```{r}
+plot(-1:5,-1:5,type="n",xlab='X1', ylab='X2')
+points(c(3,2,4,1),c(4,2,4,4), col="red", pch=15)
+points(c(2,4,4),c(1,3,1), col="blue", pch=15)
+
+#3b plotting the optimal separating hyperplane
+abline(a = -0.5, b = 1, col="darkgreen")
+```
+
+#3b continued
+Using the format $y=mx+c$, the equation for the hyperplane above would be $y = x -0.5$
+
+In the form of 9.1 with $X_1$ and $X_2$, we get $X_2 = X_1 - 0.5$ or $X_2 - X_1 + 0.5 = 0$
+
+#3c
+Classify to red if $X_2 - X_1 + 0.5 > 0$ else blue otherwise where $\beta_0=0.5$, $\beta_1=-1$, and $\beta_2=1$
+
+#3d
+```{r}
+plot(-1:5,-1:5,type="n",xlab='X1', ylab='X2')
+points(c(3,2,4,1),c(4,2,4,4), col="red", pch=15)
+points(c(2,4,4),c(1,3,1), col="blue", pch=15)
+
+#3b plotting the optimal separating hyperplane
+abline(a = -0.5, b = 1, col="darkgreen")
+
+#3d margin for maximal margin hyperplane
+abline(-1, 1, col='darkgreen',lty='dotted')
+abline(0, 1, col='darkgreen',lty='dotted')
+
+
+```
+#3e
+the support vectors for the maximal margin classifier:(2,1), (2,2), (4,3) and (4,4)
+
+#3f
+A slight movement of the seventh observation (4,1) would not affect the maximal margin hyperplane because it is not a support vector (only those mentioned in 3e are). Since only movements in support vectors will affect the maximal margin hyperplane, a slight movement in the seventh observation will not affect the maximal margin hyperplane. 
+
+#3g
+
+```{r}
+plot(-1:5,-1:5,type="n",xlab='X1', ylab='X2')
+points(c(3,2,4,1),c(4,2,4,4), col="red", pch=15)
+points(c(2,4,4),c(1,3,1), col="blue", pch=15)
+
+#3g plotting non optimal separating hyperparameter where intercept a is -0.1 and slope b is 1 which results in $-0.1 + X_1 - X_2 = 0$ as the equation for the hyperplane
+abline(-0.1,1, col="black", lwd=2)
+```
+
+
+#3h
+
+```{r}
+plot(-1:5,-1:5,type="n",xlab='X1', ylab='X2')
+points(c(3,2,4,1),c(4,2,4,4), col="red", pch=15)
+points(c(2,4,4),c(1,3,1), col="blue", pch=15)
+
+#3h (additional observation represented by red triangle)
+points(3,0, col="red", pch=17)
+```
+
+#Question 1
+
+```{r}
+#install.packages("rpart.plot")
+#install.packages("randomForest")
+library(rpart)
+library(rpart.plot)
+library(caret)
+library(randomForest)
+```
+
+```{r}
+set.seed(100)
+
+#Use rnorm to simulate the normal distributions for the 2 datasets 
+normal_dist_1 <- rnorm(n = 200, mean = 5, sd = 2)
+normal_dist_2 <- rnorm(n = 200, mean = -5, sd = 2)
+
+#Use the normal distribution to simulate dataframes with a class label then combine them together
+data_frame1 <- data.frame(val = normal_dist_1, label = rep("cat",200))
+data_frame2 <- data.frame(val = normal_dist_2, label = rep("dog",200))
+dataset1 <- rbind(data_frame1, data_frame2)
+
+#Convert the label feature to a categorical variable
+dataset1$label <- as.factor(dataset1$label)
+
+head(dataset1)
+summary(dataset1)
+
+```
+
+
+```{r}
+#Inducing a binary decision tree using rpart then plotting it using rpart.plot
+binary_decision_tree <- rpart(label~val, dataset1, method = "class")
+rpart.plot(binary_decision_tree)
+```
+The threshold value for the feature in the first split is 0.46 as shown above. Since the tree is able to classify both classes, it follows an empirical distribution. 
+The tree above has three nodes (1 root node and 2 leaf nodes).
+
+```{r}
+#Write our functions to calculate gini and entropy
+entropy_func <- function(p){
+entropy = (p*log(p) + (1-p) * log(1-p))
+return (entropy)}
+
+gini_func <- function(p){
+gini = 2 * p * (1-p)
+return (gini)}
+```
+
+```{r}
+#Use the above entropy and gini functions to compute the entropy and gini at each node
+p_tree1 <- c(0.5, 0, 1)
+
+entropy_tree1 <- sapply(p_tree1, entropy_func)
+cat("Entropy at each node of tree 1: ",entropy_tree1)
+
+gini_tree1 <- sapply(p_tree1, gini_func)
+cat("\nGini at each node of tree 1: ",gini_tree1)
+
+```
+
+```{r}
+#Repeat the same process using normal distributions of (1,2) and (-1,2)
+set.seed(200)
+#Use rnorm to simulate the normal distributions for the 2 datasets 
+normal_dist_1 <- rnorm(n = 100, mean = 1, sd = 2)
+normal_dist_2 <- rnorm(n = 100, mean = -1, sd = 2)
+
+#Use the normal distribution to simulate dataframes with a class label then combine them together
+data_frame1 <- data.frame(val = normal_dist_1, label = rep("cat",100))
+data_frame2 <- data.frame(val = normal_dist_2, label = rep("dog",100))
+dataset2 <- rbind(data_frame1, data_frame2)
+
+#Convert the label feature to a categorical variable
+dataset2$label <- as.factor(dataset2$label)
+
+head(dataset2)
+summary(dataset2)
+```
+
+```{r}
+#Inducing a binary decision tree using rpart then plotting it using rpart.plot
+binary_decision_tree2 <- rpart(label~val, dataset2, method = "class")
+rpart.plot(binary_decision_tree2)
+```
+The threshold value for the feature in the first split is 0.68 as shown above.
+The tree above has 13 nodes. Due to this large size of decision tree, there are overlapping of labels.
+This means that the decision tree is more likely to overfit and be less interpretable.
+
+```{r}
+#Use the above entropy and gini functions to compute the entropy and gini at each node
+p_tree2 <- c(0.5,0.18,0.72,0.63,0.54,0.22,0.64,0.71,0.57,0.36,0.80,0.85,0.88)
+
+entropy_tree2 <- sapply(p_tree2, entropy_func)
+cat("Entropy at each node of tree 2: ",entropy_tree2)
+
+gini_tree2 <- sapply(p_tree2, gini_func)
+cat("\nGini at each node of tree 2: ",gini_tree2)
+
+```
+
+```{r}
+#Pruning the tree
+
+binary_decision_tree2_prune <- prune.rpart(binary_decision_tree2, cp = 0.1)
+rpart.plot(binary_decision_tree2_prune)
+
+```
+From above, we can see that the pruned tree has a lot less nodes, in this case, 3 nodes (1 root and 2 leaf nodes). We can observe that the results of the pruned tree is better than the initial tree due to less nodes and less overlapping labels. This means that parts of the tree that do not contribute to the classifier have been removed. This decreases the risk of overfitting.
+
+```{r}
+#Use the entropy and gini functions to compute the entropy and gini at each node
+p_tree3 <- c(0.5,0.18,0.72)
+
+entropy_tree3 <- sapply(p_tree3, entropy_func)
+cat("Entropy at each node of tree 3: ",entropy_tree3)
+
+gini_tree3 <- sapply(p_tree3, gini_func)
+cat("\nGini at each node of tree 3: ",gini_tree3)
+```
+#Question 2
+
+```{r}
+set.seed(2)
+white_wine_data <- read.csv('https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv', header = TRUE, sep = ";")
+summary(white_wine_data)
+head(white_wine_data)
+```
+
+```{r}
+red_wine_data <- read.csv('https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv', header = TRUE, sep = ";")
+#str(red_wine_data)
+summary(red_wine_data)
+head(red_wine_data)
+```
+
+```{r}
+#Using createDataPartition to perform 80/20 train-test split on white wine data
+
+#Changing our response variable quality to a categorical value
+white_wine_data$quality <- as.factor(white_wine_data$quality)
+
+datasetPartition <- createDataPartition(white_wine_data$quality, p = 0.8, list = FALSE)
+train_white <- white_wine_data[datasetPartition,]
+test_white <- white_wine_data[-datasetPartition,]
+
+cat("Dimensions of training data: ", dim(train_white))
+cat("\nDimensions of testing data: ", dim(test_white))
+
+```
+
+```{r}
+#Using createDataPartition to perform 80/20 train-test split on red wine data
+
+#Changing our response variable quality to a categorical value
+red_wine_data$quality <- as.factor(red_wine_data$quality)
+
+datasetPartition1 <- createDataPartition(red_wine_data$quality, p = 0.8, list = FALSE)
+train_red <- red_wine_data[datasetPartition1,]
+test_red <- red_wine_data[-datasetPartition1,]
+
+cat("Dimensions of training data: ", dim(train_red))
+cat("\nDimensions of testing data: ", dim(test_red))
+```
+
+```{r}
+#Decision tree for white wine
+decision_tree_white <- rpart(quality~., train_white, method = "class")
+rpart.plot(decision_tree_white)
+```
+```{r}
+#Decision tree for red wine
+decision_tree_red <- rpart(quality~., train_red, method = "class")
+rpart.plot(decision_tree_red)
+```
+
+```{r}
+#using the caret package confusionMatrix method to determine the 
+#decision tree accuracy on the white wine test set
+
+predict_white <- predict(decision_tree_white, test_white, type = 'class')
+confusionMatrix(predict_white, test_white$quality)
+```
+```{r}
+#using the caret package confusionMatrix method to determine the 
+#decision tree accuracy on the red wine test set
+
+predict_red <- predict(decision_tree_red, test_red, type = 'class')
+confusionMatrix(predict_red, test_red$quality)
+```
+It can be seen that the decision tree for white wine had an accuracy of 54.91% while the decision tree for
+the red wine had an accuracy of 60.57%.
+
+For the white wine decision tree, it was observed that the first split on alcohol < 11 while 
+the red wine decision tree performed the first split on alcohol < 10
+
+In terms of variables of interest:
+
+The white wine decision tree utilized the free sulfur dioxide variable while the red wine decision tree did not
+
+On the flip side, the red wine decision tree utilized the total sulfur dioxide, sulphates, and residual sugar
+variable while the white wine decision tree did not
+
+```{r}
+#Repeat with a random forest tree model for white wine data
+random_forest_white <- train(quality ~ ., data = train_white, method = "rf", preProcess = c("center","scale"))
+predict_white_random_forest <- predict(random_forest_white, test_white)
+confusionMatrix(predict_white_random_forest, test_white$quality)
+
+```
+From above, we can see that when we use random forest tree model on the white wine data
+we get an accuracy of 66.97% which when compared to the decision tree model accuracy of
+54.91%, shows an improvement.
+
+
+```{r}
+#Repeat with a random forest tree model for red wine data
+random_forest_red <- train(quality ~ ., data = train_red, method = "rf", preProcess = c("center","scale"))
+predict_red_random_forest <- predict(random_forest_red, test_red)
+confusionMatrix(predict_red_random_forest, test_red$quality)
+
+```
+From above, we can see that when we use random forest tree model on the red wine data
+we get an accuracy of 73.82% which when compared to the decision tree model accuracy of
+60.57%, shows an improvement.
+
+#Question 3
+```{r}
+#install.packages("tm")
+library(tm)
+library(e1071)
+```
+
+```{r}
+sms_data <- read.csv("D:\\Users\\giris\\Downloads\\SMSSpamCollection",header = FALSE,sep = "\t", quote = "", stringsAsFactors=FALSE)
+colnames(sms_data) <- c("Class", "Message")
+
+#Changing our response variable quality to a categorical value
+sms_data$Class <- as.factor(sms_data$Class)
+
+summary(sms_data)
+head(sms_data)
+```
+
+```{r}
+corpus <- VCorpus(VectorSource(sms_data$Message))
+
+#Convert lowercase
+corpus <- tm_map(corpus, content_transformer(tolower))
+
+#Remove stopwords
+corpus <- tm_map(corpus, removeWords, stopwords("en"))
+
+#Strip whitespace
+corpus <- tm_map(corpus, stripWhitespace)
+
+#Remove punctuation
+corpus <- tm_map(corpus, removePunctuation)
+```
+
+```{r}
+#Create DocumentTermMatrix
+doc_term_matrix <- DocumentTermMatrix(corpus)
+doc_term_matrix
+
+#Use findFreqTerms to contruct features from words occuring more than 10 times
+const_features <- findFreqTerms(doc_term_matrix, 10)
+const_features <- as.data.frame(data.matrix(doc_term_matrix),stringsAsFactors=FALSE)
+
+```
+```{r}
+part = createDataPartition(const_features$class,p=0.8,list=FALSE)
+train =const_features[part,]
+test = const_features[-part,]
+class(train$class)
+
+```
+
+```{r}
+#split the data into a training and test set
+doc_term_matrix_train = doc_term_matrix[1:3999,]
+doc_term_matrix_test = doc_term_matrix[4000:5574,]
+
+train_labels <- sms_data[1:3999, ]$Class
+train_labels <- as.factor(train_labels)
+test_labels <- sms_data[4000:5574, ]$Class
+test_labels <- as.factor(test_labels)
+
+```
+
+```{r}
+#create a DocumentTermMatrix for each
+freq_doc_term_matrix_train <- doc_term_matrix_train[, const_features]
+freq_doc_term_matrix_test <- doc_term_matrix_test[, const_features]
+
+freq_doc_term_matrix_train
+```
+
+```{r}
+#Convert the DocumentTermMatrix train/test matrices to a Boolean representation (counts greater than zero are converted to a 1)
+count_func <- function(x) {x <- ifelse(x > 0, "1", "0")}
+
+#Apply boolean representation function to train/test matrices
+train <- apply(train, MARGIN = 2,count_func)
+test <- apply(test, MARGIN = 2, count_func)
+train <- as.data.frame(train)
+test <- as.data.frame(test)
+
+class(train$class)
+
+```
+
+```{r}
+# fit a SVM using the e1071 package
+fit_svm_train = svm(class~., data= train, kernel = "linear")
+
+pred_svm_train = predict(fit_svm_train, train)
+train_acc = mean(pred_svm_train == train_labels)
+cat("The train accuracy of SVM is :", train_acc)
+
+
+pred_svm_test = predict(fit_svm_train, test)
+test_acc = mean(pred_svm_test == test_labels)
+cat("\nThe test accuracy of SVM is :", test_acc)
+```
+
+```{r}
+train
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
