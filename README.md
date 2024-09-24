@@ -45,3 +45,7 @@ Explored the fundamentals of neural networks and deep learning, including networ
 ## Unsupervised Learning - Dimensionality Reduction/Clustering
 
 Investigated unsupervised learning techniques such as principal component analysis for dimensionality reduction and K-means clustering for discovering patterns in unlabeled data.
+
+---
+
+This repository serves as a comprehensive record of my journey through the Data Preparation and Analysis course, showcasing the skills and knowledge gained in various ddata preprocessing, cleaning, and analytical techniques. Feel free to explore the code and documentation for a detailed insight into each topic.
