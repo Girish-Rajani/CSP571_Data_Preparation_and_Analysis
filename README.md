@@ -5,13 +5,13 @@ This repository contains my learning journey in the subject of Data Preparation 
 
 ## Table of Contents
 
-1. [Statistical Learning]([#statistical-learning))
+1. [Statistical Learning]([#statistical-learning)
 2. [Linear Regression](#linear-regression)
 3. [Classification](#classification)
 4. [Resampling & Cross-Validation](#resampling--cross-validation)
-5. [Non-Linear Models]([#non-linear-models))
-6. [Supervised Learning - Decision Trees & Support Vector Machines](#supervised-learning---decision-trees--support-vector-machines))
-7. [Deep Learning - Neural Networks]([#deep-learning---neural-networks))
+5. [Non-Linear Models]([#non-linear-models)
+6. [Supervised Learning - Decision Trees & Support Vector Machines](#supervised-learning---decision-trees--support-vector-machines)
+7. [Deep Learning - Neural Networks]([#deep-learning---neural-networks)
 8. [Unsupervised Learning - Dimensionality Reduction/Clustering](#unsupervised-learning---dimensionality-reductionclustering)
 
 ## Statistical Learning
