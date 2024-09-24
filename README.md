@@ -48,4 +48,4 @@ Investigated unsupervised learning techniques such as principal component analys
 
 ---
 
-This repository serves as a comprehensive record of my journey through the Data Preparation and Analysis course, showcasing the skills and knowledge gained in various ddata preprocessing, cleaning, and analytical techniques. Feel free to explore the code and documentation for a detailed insight into each topic.
+This repository serves as a comprehensive record of my journey through the Data Preparation and Analysis course, showcasing the skills and knowledge gained in various data preprocessing, cleaning, and analytical techniques. Feel free to explore the code and documentation for a detailed insight into each topic.
